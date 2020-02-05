@@ -10,15 +10,15 @@ using Microsoft.Xna.Framework.Content;
 
 namespace MonoGameWindowsStarter
 {
-    public class Platform
+    public class Sprite
     {
         public BoundaryRectangle bounds;
 
         Game1 game;
 
-        public Texture2D platform;
+        public Texture2D sprite;
 
-        public Platform(Game1 game)
+        public Sprite(Game1 game)
         {
             this.game = game;
         }
@@ -37,6 +37,8 @@ namespace MonoGameWindowsStarter
         {
 
         }
+
+
 
     }
 }

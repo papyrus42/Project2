@@ -27,7 +27,11 @@ namespace MonoGameWindowsStarter
 
         public static implicit operator Rectangle(BoundaryRectangle br)
         {
-            return new Rectangle((int)br.X,(int)br.Y, (int)br.Width,(int)br.Height);
+            return new Rectangle(
+                (int)br.X,
+                (int)br.Y,
+                (int)br.Width,
+                (int)br.Height);
         }
 
 

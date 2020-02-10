@@ -80,6 +80,10 @@ namespace MonoGameWindowsStarter
                     soundHasPlayed = true;
                 }
             }
+            else
+            {
+                jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
+            }
             if (jumpHeight >= 90)
             {
                 canJump = false;
@@ -87,7 +91,7 @@ namespace MonoGameWindowsStarter
             if (!canJump)
             {
                 jumpHeight -= 3;
-                jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
+                //jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
             }
 
             if (bounds.Y >= groundLevel && jumpHeight <= 0)
@@ -95,6 +99,7 @@ namespace MonoGameWindowsStarter
                 canJump = true;
                 soundHasPlayed = false;
             }
+            
 
             bounds.X += runDirection;
             bounds.Y += jumpDirection;

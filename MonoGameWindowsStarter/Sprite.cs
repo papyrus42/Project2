@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MonoGameWindowsStarter
 {
@@ -24,6 +25,10 @@ namespace MonoGameWindowsStarter
 
         public float groundLevel;
 
+        SoundEffect jumpSFX;
+
+        bool soundHasPlayed;
+
         public Sprite(Game1 game)
         {
             this.game = game;
@@ -38,11 +43,13 @@ namespace MonoGameWindowsStarter
             groundLevel = game.GraphicsDevice.Viewport.Height - bounds.Height;
             jumpHeight = 0;
             canJump = true;
+            soundHasPlayed = false;
         }
 
         public void LoadContent(ContentManager cm, string name)
         {
             sprite = cm.Load<Texture2D>(name);
+            jumpSFX = cm.Load<SoundEffect>("jumpSound");
         }
 
         public void Update(GameTime gameTime)
@@ -67,6 +74,11 @@ namespace MonoGameWindowsStarter
             {
                 jumpDirection -= (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
                 jumpHeight += 3;
+                if (!soundHasPlayed)
+                {
+                    jumpSFX.Play();
+                    soundHasPlayed = true;
+                }
             }
             if (jumpHeight >= 90)
             {
@@ -81,6 +93,7 @@ namespace MonoGameWindowsStarter
             if (bounds.Y >= groundLevel && jumpHeight <= 0)
             {
                 canJump = true;
+                soundHasPlayed = false;
             }
 
             bounds.X += runDirection;

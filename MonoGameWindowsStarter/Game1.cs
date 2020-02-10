@@ -12,11 +12,13 @@ namespace MonoGameWindowsStarter
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Sprite testPlayer;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            testPlayer = new Sprite(this);
         }
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace MonoGameWindowsStarter
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            testPlayer.Initialize(10, 10, 0, 760);
             base.Initialize();
         }
 
@@ -40,6 +42,7 @@ namespace MonoGameWindowsStarter
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            testPlayer.LoadContent(Content, "pixel");
 
             // TODO: use this.Content to load your game content here
         }
@@ -64,6 +67,7 @@ namespace MonoGameWindowsStarter
                 Exit();
 
             // TODO: Add your update logic here
+            testPlayer.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -77,7 +81,9 @@ namespace MonoGameWindowsStarter
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            spriteBatch.Begin();
+            testPlayer.Draw(spriteBatch);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

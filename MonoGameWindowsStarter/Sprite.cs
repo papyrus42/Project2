@@ -64,8 +64,8 @@ namespace MonoGameWindowsStarter
 
         public void Initialize(float width, float height, float x, float y)
         {
-            bounds.Width = width;
-            bounds.Height = height;
+            bounds.Width = 49;
+            bounds.Height = 64;
             bounds.X = x;
             bounds.Y = y;
             groundLevel = game.GraphicsDevice.Viewport.Height - bounds.Height;
@@ -208,7 +208,7 @@ namespace MonoGameWindowsStarter
                FRAME_WIDTH, // Width 
                FRAME_HEIGHT // Height
                );
-            spriteBatch.Draw(sprite,position, bounds, Color.White);
+            spriteBatch.Draw(sprite,position, source, Color.White);
         }
 
 

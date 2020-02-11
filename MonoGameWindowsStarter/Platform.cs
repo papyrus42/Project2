@@ -18,6 +18,8 @@ namespace MonoGameWindowsStarter
 
         public Texture2D platform;
 
+        //bool isOnPlatform;
+
         public Platform(Game1 game)
         {
             this.game = game;
@@ -29,6 +31,7 @@ namespace MonoGameWindowsStarter
             bounds.Height = height;
             bounds.X = x;
             bounds.Y = y;
+            //isOnPlatform = false;
         }
         public void LoadContent(ContentManager cm, string name)
         {
@@ -37,13 +40,13 @@ namespace MonoGameWindowsStarter
 
         public void Update(GameTime gameTime)
         {
-            //check for collisions
-            //moving platforms will be an inheritance of this class
+           
+            
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(platform, bounds, Color.White);
+            spriteBatch.Draw(platform, bounds, Color.Red);
         }
 
     }

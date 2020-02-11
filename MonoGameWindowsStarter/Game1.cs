@@ -12,14 +12,17 @@ namespace MonoGameWindowsStarter
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Sprite testPlayer;
+        Sprite player;
         SpriteFont font;
-
+        Platform plat;
+        bool isOnPlatform;
+      
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            testPlayer = new Sprite(this);
+            player = new Sprite(this);
+            plat = new Platform(this);
         }
 
         /// <summary>
@@ -31,7 +34,12 @@ namespace MonoGameWindowsStarter
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            testPlayer.Initialize(10, 10, 0, 760);
+            graphics.PreferredBackBufferWidth = 1042;
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.ApplyChanges();
+            player.Initialize(10, 10, 0, 760);
+            plat.Initialize(60, 15, 500, 650);
+            
             base.Initialize();
         }
 
@@ -43,7 +51,9 @@ namespace MonoGameWindowsStarter
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            testPlayer.LoadContent(Content, "pixel");
+            player.LoadContent(Content, "sprite sheet");
+            plat.LoadContent(Content,"pixel");
+            
             font = Content.Load<SpriteFont>("Font");
 
             // TODO: use this.Content to load your game content here
@@ -69,7 +79,29 @@ namespace MonoGameWindowsStarter
                 Exit();
 
             // TODO: Add your update logic here
-            testPlayer.Update(gameTime);
+            player.Update(gameTime);
+            int jumpDirection = 0;
+            //check for collisions
+            
+            plat.Update(gameTime);
+            if (player.bounds.CollidesWith(plat.bounds))
+            {
+                isOnPlatform = true;
+            }
+            else
+            {
+                isOnPlatform = false;
+            }
+
+            if (isOnPlatform)
+            {
+                player.jumpHeight = 0;
+                player.canJump = true;
+                player.bounds.Y = plat.bounds.Y - plat.bounds.Height;
+            }
+
+
+            player.bounds.Y += jumpDirection;
 
             base.Update(gameTime);
         }
@@ -84,8 +116,10 @@ namespace MonoGameWindowsStarter
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            testPlayer.Draw(spriteBatch);
+            plat.Draw(spriteBatch);
+            player.Draw(spriteBatch);
             spriteBatch.DrawString(font, "HEWWO", new Vector2(200, 200), Color.White);
+            
             spriteBatch.End();
             base.Draw(gameTime);
         }

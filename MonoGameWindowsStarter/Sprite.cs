@@ -11,6 +11,14 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace MonoGameWindowsStarter
 {
+    enum State
+    {
+        South = 0,
+        East = 1,
+        West = 2,
+        North = 3,
+        Idle = 4,
+    }
     public class Sprite
     {
         public BoundaryRectangle bounds;
@@ -19,9 +27,9 @@ namespace MonoGameWindowsStarter
 
         public Texture2D sprite;
 
-        float jumpHeight;
+        public float jumpHeight;
 
-        bool canJump;
+        public bool canJump;
 
         public float groundLevel;
 
@@ -29,11 +37,29 @@ namespace MonoGameWindowsStarter
 
         bool soundHasPlayed;
 
-        bool isOnPlatform;
+       
+
+        const int ANIMATION_FRAME_RATE = 124;
+        const int FRAME_WIDTH = 49;
+
+        /// <summary>
+        /// The hieght of the animation frames
+        /// </summary>
+        const int FRAME_HEIGHT = 64;
+
+        State state;
+        TimeSpan timer;
+        int frame;
+        Vector2 position;
+
+        //bool isOnPlatform;
 
         public Sprite(Game1 game)
         {
             this.game = game;
+            timer = new TimeSpan(0);
+            position = new Vector2(200, 200);
+            state = State.Idle;
         }
 
         public void Initialize(float width, float height, float x, float y)
@@ -46,7 +72,7 @@ namespace MonoGameWindowsStarter
             jumpHeight = 0;
             canJump = true;
             soundHasPlayed = false;
-            isOnPlatform = false;
+            //isOnPlatform = false;
         }
 
         public void LoadContent(ContentManager cm, string name)
@@ -55,7 +81,7 @@ namespace MonoGameWindowsStarter
             jumpSFX = cm.Load<SoundEffect>("jumpSound");
         }
 
-        public void Update(GameTime gameTime, Platform platform)
+        public void Update(GameTime gameTime)
         {
             float runDirection = 0;
             float jumpDirection = 0;
@@ -63,18 +89,21 @@ namespace MonoGameWindowsStarter
             //run left
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
+                state = State.West;
                 runDirection -= (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.2);
 
             }
             //run right
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
+                state = State.East;
                 runDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.2);
             }
 
             //jump
             if (Keyboard.GetState().IsKeyDown(Keys.Up) && jumpHeight < 90 && canJump)
             {
+                state = State.North;
                 jumpDirection -= (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
                 jumpHeight += 3;
                 if (!soundHasPlayed)
@@ -85,6 +114,7 @@ namespace MonoGameWindowsStarter
             }
             else
             {
+                state = State.Idle;
                 jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
             }
             if (jumpHeight >= 90)
@@ -106,27 +136,45 @@ namespace MonoGameWindowsStarter
 
             bounds.X += runDirection;
             bounds.Y += jumpDirection;
+            if (state != State.Idle) timer += gameTime.ElapsedGameTime;
 
-            if (bounds.CollidesWith(platform.bounds))
+            // Determine the frame should increase.  Using a while 
+            // loop will accomodate the possiblity the animation should 
+            // advance more than one frame.
+            while (timer.TotalMilliseconds > ANIMATION_FRAME_RATE)
             {
-                isOnPlatform = true;
-            }
-            else
-            {
-                isOnPlatform = false;
+                // increase by one frame
+                frame++;
+                // reduce the timer by one frame duration
+                timer -= new TimeSpan(0, 0, 0, 0, ANIMATION_FRAME_RATE);
             }
 
-            if (isOnPlatform)
-            {
-                jumpHeight = 0;
-                canJump = true;
-            }
-            else if (bounds.Y < groundLevel)
-            {
-                jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
-            }
+            // Keep the frame within bounds (there are four frames)
+            frame %= 4;
 
             //collisions
+
+            ////////////if (bounds.CollidesWith(platform.bounds))
+            ////////////{
+            ////////////    isOnPlatform = true;
+            ////////////}
+            ////////////else
+            ////////////{
+            ////////////    isOnPlatform = false;
+            ////////////}
+
+            ////////////if (isOnPlatform)
+            ////////////{
+            ////////////    jumpHeight = 0;
+            ////////////    canJump = true;
+            ////////////}
+            ////////////else if (bounds.Y < groundLevel)
+            ////////////{
+            ////////////    jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
+            ////////////}
+
+            ////////////bounds.X += runDirection;
+            ////////////bounds.Y += jumpDirection;
 
             //staying in the screen
             if (bounds.X < 0)
@@ -154,7 +202,13 @@ namespace MonoGameWindowsStarter
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sprite, bounds, Color.White);
+            var source = new Rectangle(
+               frame * FRAME_WIDTH, // X value 
+               (int)state % 4 * FRAME_HEIGHT, // Y value
+               FRAME_WIDTH, // Width 
+               FRAME_HEIGHT // Height
+               );
+            spriteBatch.Draw(sprite,position, bounds, Color.White);
         }
 
 

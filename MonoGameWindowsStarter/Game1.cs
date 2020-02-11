@@ -13,6 +13,7 @@ namespace MonoGameWindowsStarter
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Sprite testPlayer;
+        SpriteFont font;
 
         public Game1()
         {
@@ -43,6 +44,7 @@ namespace MonoGameWindowsStarter
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             testPlayer.LoadContent(Content, "pixel");
+            font = Content.Load<SpriteFont>("Font");
 
             // TODO: use this.Content to load your game content here
         }
@@ -83,6 +85,7 @@ namespace MonoGameWindowsStarter
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             testPlayer.Draw(spriteBatch);
+            spriteBatch.DrawString(font, "HEWWO", new Vector2(200, 200), Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }

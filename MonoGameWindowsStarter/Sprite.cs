@@ -29,6 +29,8 @@ namespace MonoGameWindowsStarter
 
         bool soundHasPlayed;
 
+        bool isOnPlatform;
+
         public Sprite(Game1 game)
         {
             this.game = game;
@@ -44,6 +46,7 @@ namespace MonoGameWindowsStarter
             jumpHeight = 0;
             canJump = true;
             soundHasPlayed = false;
+            isOnPlatform = false;
         }
 
         public void LoadContent(ContentManager cm, string name)
@@ -52,7 +55,7 @@ namespace MonoGameWindowsStarter
             jumpSFX = cm.Load<SoundEffect>("jumpSound");
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Platform platform)
         {
             float runDirection = 0;
             float jumpDirection = 0;
@@ -103,6 +106,25 @@ namespace MonoGameWindowsStarter
 
             bounds.X += runDirection;
             bounds.Y += jumpDirection;
+
+            if (bounds.CollidesWith(platform.bounds))
+            {
+                isOnPlatform = true;
+            }
+            else
+            {
+                isOnPlatform = false;
+            }
+
+            if (isOnPlatform)
+            {
+                jumpHeight = 0;
+                canJump = true;
+            }
+            else if (bounds.Y < groundLevel)
+            {
+                jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
+            }
 
             //collisions
 

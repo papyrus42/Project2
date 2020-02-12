@@ -15,7 +15,13 @@ namespace MonoGameWindowsStarter
         Sprite player;
         SpriteFont font;
         Platform plat;
-        bool isOnPlatform;
+        Platform plat2;
+        Platform plat3;
+        Platform plat4;
+        Platform plat5;
+        Platform plat6;
+        string text;
+        //bool isOnPlatform;
       
         public Game1()
         {
@@ -23,6 +29,11 @@ namespace MonoGameWindowsStarter
             Content.RootDirectory = "Content";
             player = new Sprite(this);
             plat = new Platform(this);
+            plat2 = new Platform(this);
+            plat3 = new Platform(this);
+            plat4 = new Platform(this);
+            plat5 = new Platform(this);
+            plat6 = new Platform(this);
         }
 
         /// <summary>
@@ -38,8 +49,14 @@ namespace MonoGameWindowsStarter
             graphics.PreferredBackBufferHeight = 768;
             graphics.ApplyChanges();
             player.Initialize(10, 10, 0, 760);
-            plat.Initialize(60, 15, 500, 650);
-            
+            plat.Initialize(60, 10, 500, 650);
+            plat2.Initialize(70, 10, 320, 510);
+            plat3.Initialize(50, 10, 480, 400);
+            plat4.Initialize(120, 10, 700, 400);
+            plat5.Initialize(30, 10, 575, 250);
+            plat6.Initialize(90, 10, 210, 270);
+            text = "Try to make it over here!";
+
             base.Initialize();
         }
 
@@ -51,9 +68,13 @@ namespace MonoGameWindowsStarter
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            player.LoadContent(Content, "sprite sheet");
+            player.LoadContent(Content, "more sprite");
             plat.LoadContent(Content,"pixel");
-            
+            plat2.LoadContent(Content, "pixel");
+            plat3.LoadContent(Content, "pixel");
+            plat4.LoadContent(Content, "pixel");
+            plat5.LoadContent(Content, "pixel");
+            plat6.LoadContent(Content, "pixel");
             font = Content.Load<SpriteFont>("Font");
 
             // TODO: use this.Content to load your game content here
@@ -84,24 +105,22 @@ namespace MonoGameWindowsStarter
             //check for collisions
             
             plat.Update(gameTime);
-            if (player.bounds.CollidesWith(plat.bounds))
+            if (player.bounds.CollidesWith(plat.bounds)|| player.bounds.CollidesWith(plat2.bounds) || player.bounds.CollidesWith(plat3.bounds)
+                || player.bounds.CollidesWith(plat4.bounds) || player.bounds.CollidesWith(plat5.bounds) || player.bounds.CollidesWith(plat6.bounds))
             {
-                isOnPlatform = true;
+                player.isOnPlatform = true;
             }
             else
             {
-                isOnPlatform = false;
+                player.isOnPlatform = false;
             }
-
-            if (isOnPlatform)
+            if (player.bounds.CollidesWith(plat6.bounds))
             {
-                player.jumpHeight = 0;
-                player.canJump = true;
-                player.bounds.Y = plat.bounds.Y - plat.bounds.Height;
+                text = "You did it!";
             }
 
 
-            player.bounds.Y += jumpDirection;
+            //player.bounds.Y += jumpDirection;
 
             base.Update(gameTime);
         }
@@ -117,8 +136,13 @@ namespace MonoGameWindowsStarter
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             plat.Draw(spriteBatch);
+            plat2.Draw(spriteBatch);
             player.Draw(spriteBatch);
-            spriteBatch.DrawString(font, "HEWWO", new Vector2(200, 200), Color.White);
+            plat3.Draw(spriteBatch);
+            plat4.Draw(spriteBatch);
+            plat5.Draw(spriteBatch);
+            plat6.Draw(spriteBatch);
+            spriteBatch.DrawString(font, text, new Vector2(200, 200), Color.White);
             
             spriteBatch.End();
             base.Draw(gameTime);

@@ -37,7 +37,7 @@ namespace MonoGameWindowsStarter
 
         bool soundHasPlayed;
 
-       
+        public bool isOnPlatform;
 
         const int ANIMATION_FRAME_RATE = 124;
         const int FRAME_WIDTH = 49;
@@ -45,7 +45,7 @@ namespace MonoGameWindowsStarter
         /// <summary>
         /// The hieght of the animation frames
         /// </summary>
-        const int FRAME_HEIGHT = 64;
+        const int FRAME_HEIGHT = 63;
 
         State state;
         TimeSpan timer;
@@ -64,15 +64,15 @@ namespace MonoGameWindowsStarter
 
         public void Initialize(float width, float height, float x, float y)
         {
-            bounds.Width = 49;
-            bounds.Height = 64;
+            bounds.Width = FRAME_WIDTH;
+            bounds.Height = FRAME_HEIGHT;
             bounds.X = x;
             bounds.Y = y;
             groundLevel = game.GraphicsDevice.Viewport.Height - bounds.Height;
             jumpHeight = 0;
             canJump = true;
             soundHasPlayed = false;
-            //isOnPlatform = false;
+            isOnPlatform = false;
         }
 
         public void LoadContent(ContentManager cm, string name)
@@ -99,6 +99,7 @@ namespace MonoGameWindowsStarter
                 state = State.East;
                 runDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.2);
             }
+            
 
             //jump
             if (Keyboard.GetState().IsKeyDown(Keys.Up) && jumpHeight < 90 && canJump)
@@ -112,10 +113,20 @@ namespace MonoGameWindowsStarter
                     soundHasPlayed = true;
                 }
             }
+            else if (isOnPlatform)
+            {
+                canJump = true;
+                jumpHeight = 0;
+                soundHasPlayed = false;
+            }
             else
             {
-                state = State.Idle;
+                
                 jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
+            }
+            if(Keyboard.GetState().IsKeyUp(Keys.Left)&& Keyboard.GetState().IsKeyUp(Keys.Right)&& Keyboard.GetState().IsKeyUp(Keys.Up))
+            {
+                state = State.Idle;
             }
             if (jumpHeight >= 90)
             {
@@ -208,7 +219,7 @@ namespace MonoGameWindowsStarter
                FRAME_WIDTH, // Width 
                FRAME_HEIGHT // Height
                );
-            spriteBatch.Draw(sprite,position, source, Color.White);
+            spriteBatch.Draw(sprite,new Vector2(bounds.X,bounds.Y), source, Color.White);
         }
 
 

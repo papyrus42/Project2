@@ -21,7 +21,6 @@ namespace MonoGameWindowsStarter
         Platform plat5;
         Platform plat6;
         string text;
-        //bool isOnPlatform;
       
         public Game1()
         {
@@ -54,7 +53,7 @@ namespace MonoGameWindowsStarter
             plat3.Initialize(50, 10, 480, 400);
             plat4.Initialize(120, 10, 700, 400);
             plat5.Initialize(30, 10, 575, 250);
-            plat6.Initialize(90, 10, 210, 270);
+            plat6.Initialize(90, 10, 280, 270);
             text = "Try to make it over here!";
 
             base.Initialize();
@@ -101,7 +100,6 @@ namespace MonoGameWindowsStarter
 
             // TODO: Add your update logic here
             player.Update(gameTime);
-            int jumpDirection = 0;
             //check for collisions
             
             plat.Update(gameTime);
@@ -118,9 +116,6 @@ namespace MonoGameWindowsStarter
             {
                 text = "You did it!";
             }
-
-
-            //player.bounds.Y += jumpDirection;
 
             base.Update(gameTime);
         }

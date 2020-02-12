@@ -135,7 +135,6 @@ namespace MonoGameWindowsStarter
             if (!canJump)
             {
                 jumpHeight -= 3;
-                //jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
             }
 
             if (bounds.Y >= groundLevel && jumpHeight <= 0)
@@ -149,9 +148,6 @@ namespace MonoGameWindowsStarter
             bounds.Y += jumpDirection;
             if (state != State.Idle) timer += gameTime.ElapsedGameTime;
 
-            // Determine the frame should increase.  Using a while 
-            // loop will accomodate the possiblity the animation should 
-            // advance more than one frame.
             while (timer.TotalMilliseconds > ANIMATION_FRAME_RATE)
             {
                 // increase by one frame
@@ -162,30 +158,6 @@ namespace MonoGameWindowsStarter
 
             // Keep the frame within bounds (there are four frames)
             frame %= 4;
-
-            //collisions
-
-            ////////////if (bounds.CollidesWith(platform.bounds))
-            ////////////{
-            ////////////    isOnPlatform = true;
-            ////////////}
-            ////////////else
-            ////////////{
-            ////////////    isOnPlatform = false;
-            ////////////}
-
-            ////////////if (isOnPlatform)
-            ////////////{
-            ////////////    jumpHeight = 0;
-            ////////////    canJump = true;
-            ////////////}
-            ////////////else if (bounds.Y < groundLevel)
-            ////////////{
-            ////////////    jumpDirection += (int)(gameTime.ElapsedGameTime.TotalMilliseconds * 0.3);
-            ////////////}
-
-            ////////////bounds.X += runDirection;
-            ////////////bounds.Y += jumpDirection;
 
             //staying in the screen
             if (bounds.X < 0)
@@ -204,11 +176,6 @@ namespace MonoGameWindowsStarter
             {
                 bounds.Y = groundLevel;
             }
-
-            //if (bounds.Y > game.GraphicsDevice.Viewport.Height - bounds.Height)
-            //{
-            //    bounds.Y = game.GraphicsDevice.Viewport.Height - bounds.Height;
-            //}
         }
 
         public void Draw(SpriteBatch spriteBatch)

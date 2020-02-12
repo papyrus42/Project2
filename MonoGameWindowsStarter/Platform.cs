@@ -18,7 +18,6 @@ namespace MonoGameWindowsStarter
 
         public Texture2D platform;
 
-        //bool isOnPlatform;
 
         public Platform(Game1 game)
         {
@@ -31,7 +30,6 @@ namespace MonoGameWindowsStarter
             bounds.Height = height;
             bounds.X = x;
             bounds.Y = y;
-            //isOnPlatform = false;
         }
         public void LoadContent(ContentManager cm, string name)
         {
